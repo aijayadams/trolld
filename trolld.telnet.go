@@ -4,33 +4,22 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"log"
 	"net"
-	"os"
+	"time"
+	"math/rand"
+
 )
-
-func LoadBundyBear() (bb []byte) {
-	f, err := os.Open("bundy.txt")
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-	filereader := bufio.NewReader(f)
-	bb, err = filereader.ReadBytes('\x00')
-
-	if err != io.EOF {
-		log.Fatal(err)
-		return
-	}
-	f.Close()
-	return
-}
 
 func Telnet(c net.Conn, a Assets, conn_limit Counter) {
 	defer c.Close()
 	defer conn_limit.Remove()
 
-	c.Write(a.trolls[0].asset)
+	// Select troll and deploy
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	troll_int := r.Int31n(int32(a.Len()))
+
+	fmt.Println("Troll: " + a.trolls[troll_int].name)
+	c.Write(a.trolls[troll_int].asset)
 
 	buf := bufio.NewReader(c)
 	for {

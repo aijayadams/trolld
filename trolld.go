@@ -39,25 +39,29 @@ func (c Counter) Remove() {
 	c.count = c.count - 1
 }
 
+// Trollin' Asset Definition
 type Asset struct {
    asset []byte
+   name string
+   protocol string
 }
 
 type Assets struct {
     trolls []Asset
 }
 
-
 func (s *Assets) AddAsset(troll Asset) {
     s.trolls = append(s.trolls, troll)
 }
 
-func main() {
+func (s *Assets) Len() int {
+  return len(s.trolls)
+}
 
+func main() {
     // Load trollin' Assets
     var a Assets
-    a.AddAsset(Asset{asset: LoadBundyBear()})
-
+    LoadTrolls(&a, "./trolls")
 
     // Set connection limit
 	conn_limit := NewCounter(16)
