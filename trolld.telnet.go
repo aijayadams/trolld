@@ -26,22 +26,19 @@ func LoadBundyBear() (bb []byte) {
 	return
 }
 
-func Telnet(c net.Conn, bear []byte, conn_limit Counter) {
-	fmt.Println(c.RemoteAddr())
+func Telnet(c net.Conn, a Assets, conn_limit Counter) {
 	defer c.Close()
 	defer conn_limit.Remove()
 
-	c.Write(bear)
+	c.Write(a.trolls[0].asset)
 
 	buf := bufio.NewReader(c)
 	for {
-		line, _, err := buf.ReadLine()
+		_, _, err := buf.ReadLine()
 		if err == io.EOF {
-			fmt.Println("esmf")
+			fmt.Println("Connection Closed")
 			return
 		}
-		fmt.Println(string(line))
-		c.Write(line)
 		c.Close()
 	}
 }

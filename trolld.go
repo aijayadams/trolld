@@ -39,13 +39,32 @@ func (c Counter) Remove() {
 	c.count = c.count - 1
 }
 
+type Asset struct {
+   asset []byte
+}
+
+type Assets struct {
+    trolls []Asset
+}
+
+
+func (s *Assets) AddAsset(troll Asset) {
+    s.trolls = append(s.trolls, troll)
+}
+
 func main() {
-	// Set connection limit
+
+    // Load trollin' Assets
+    var a Assets
+    a.AddAsset(Asset{asset: LoadBundyBear()})
+
+
+    // Set connection limit
 	conn_limit := NewCounter(16)
 
-	//
-	bear := LoadBundyBear()
+	// Listen for connections
 	l, err := net.Listen("tcp", ":4000")
+	fmt.Println("Waiting for connections on :4000")
 
 	if err != nil {
 		log.Fatal(err)
@@ -61,6 +80,8 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		go Telnet(conn, bear, conn_limit)
+		// Spawning handler for Connection
+		fmt.Println("Spawning go routine for ", conn.RemoteAddr())
+		go Telnet(conn, a, conn_limit)
 	}
 }
