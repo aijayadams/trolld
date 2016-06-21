@@ -1,2 +1,2 @@
 # trolld
-go run trolld.go trolld.telnet.go -O
+go run *.go -O
